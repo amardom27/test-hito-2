@@ -1,18 +1,22 @@
 pipeline {
-    agent {
-        docker { image 'node:20' }
-    }
+    agent any
 
     stages {
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
         stage('Build') {
             steps {
-                sh 'npm install && npm run build'
+                sh 'npm run build'
             }
         }
 
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'dist/**'
+                archiveArtifacts artifacts: 'dist/**', fingerprint: true
             }
         }
     }
